@@ -9,11 +9,28 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('user_id', 'company', 'company_phone')
 
+    def create(self, validated_data):
+        profile = Profile(
+            user=validated_data['user_id'],
+            company=validated_data['company'],
+            company_phone=validated_data['company_phone']
+        )
+        profile.save()
+        return profile
+
 
 class UserSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer()
+
     class Meta:
         model = User
-        fields = ('id', 'name', 'email', 'phone')
+        fields = ('id', 'name', 'email', 'phone', 'profile')
+
+    def create(self, validated_data):
+        profile_data = validated_data.pop('profile')
+        user = User.objects.create(**validated_data)
+        Profile.objects.create(user=user, **profile_data)
+        return user
 
 
 class OrderSerializer(serializers.ModelSerializer):

@@ -5,6 +5,7 @@ from django.db import models
 
 class User(models.Model):
 
+    objects = None
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
@@ -28,6 +29,7 @@ class Profile(models.Model):
 
 class Order(models.Model):
 
+    objects = None
     id = models.AutoField(primary_key=True)
     price = models.FloatField(default=0)
     order_description = models.CharField(max_length=255)

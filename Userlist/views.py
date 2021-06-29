@@ -125,8 +125,8 @@ class ListCreateProfileView(ListCreateAPIView):
         return Profile.objects.all()
 
     def create(self, request, *args, **kwargs):
-        Profile.user = self.kwargs.get('id')
-        print(Profile.user)
+        user = User.objects.get(id=kwargs.get('pk'))
+        Profile.user = user
         serializer = ProfileSerializer(Profile.user, data=request.data)
 
         if serializer.is_valid():
